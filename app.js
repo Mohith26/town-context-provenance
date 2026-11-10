@@ -209,7 +209,6 @@ function timelineSVG(c) {
     const d = times.map((t, k) => `${k ? 'L' : 'M'}${x(t).toFixed(1)},${yv(curve[k][vi]).toFixed(1)}`).join('');
     s += `<path d="${d}" fill="none" stroke="${colorFor(v)}" stroke-width="${v === c.map ? 2.2 : 1.4}" opacity="${v === c.map ? 1 : 0.75}"/>`;
   });
-  s += `<text x="14" y="${curveTop + 12}" font-size="9.5" fill="${COL.muted}">belief in each value over time</text>`;
   s += `<line x1="${x(NOW)}" x2="${x(NOW)}" y1="${lanesTop}" y2="${curveTop + curveH}" stroke="${COL.muted}" stroke-width="1"/>`;
   // axis ticks
   const span = t1 - t0, step = span > 30 * C.DAY ? 14 * C.DAY : 7 * C.DAY;
@@ -254,6 +253,7 @@ function renderDetail() {
     <div class="d-explain">${explain(q, r, i)}</div>
     <div class="sec">Belief now</div>${bars}
     <div class="sec">Evidence timeline</div><div class="timeline">${timelineSVG(c)}</div>
+    <div class="cap">Top: what each source said and when (dot size = source reliability, faded = superseded, dashed = what replaced it). Bottom: belief in each value over time, decaying between messages.</div>
     <div class="sec">Sources (${c.classified.length}), newest first</div>${cards}`;
 }
 
