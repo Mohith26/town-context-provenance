@@ -3,97 +3,115 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Context provenance: concept demo for Town (unofficial)</title>
-<meta name="description" content="Claim-level provenance and staleness guard for a team AI assistant, with a budgeted context optimizer. Unofficial concept demo, synthetic data." />
+<title>Context check · Town (unofficial concept demo)</title>
+<meta name="description" content="Claim-level provenance and staleness guard for Town threads, with a budgeted context optimizer. Unofficial concept demo by Mohith Gajjela, synthetic data." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
 <link rel="stylesheet" href="styles.css" />
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 </head>
 <body>
 <div class="app">
-  <aside class="sidebar">
-    <div class="ws">
-      <div class="ws-avatar">F</div>
-      <div><div class="ws-name">Fieldstone</div><div class="ws-sub">Team workspace · synthetic</div></div>
+  <nav class="rail" aria-label="Primary">
+    <button class="rail-btn" title="Toggle sidebar"><i class="hgi-stroke hgi-sidebar-left"></i></button>
+    <button class="rail-btn active" title="Threads"><i class="hgi-stroke hgi-bubble-chat"></i></button>
+    <button class="rail-btn dot" title="Need to Know"><i class="hgi-stroke hgi-idea-01"></i></button>
+    <button class="rail-btn" title="Routines"><i class="hgi-stroke hgi-flash"></i></button>
+    <button class="rail-btn" title="Wiki"><i class="hgi-stroke hgi-book-open-01"></i></button>
+    <button class="rail-btn" title="Content"><i class="hgi-stroke hgi-property-view"></i></button>
+    <button class="rail-btn" title="Integrations"><i class="hgi-stroke hgi-library"></i></button>
+    <div class="rail-spacer"></div>
+    <button class="rail-btn" title="Search"><i class="hgi-stroke hgi-search-01"></i></button>
+    <button class="rail-btn" title="Help"><i class="hgi-stroke hgi-help-circle"></i></button>
+    <button class="rail-btn" title="More"><i class="hgi-stroke hgi-more-horizontal"></i></button>
+  </nav>
+
+  <aside class="threads">
+    <div class="townie-card">
+      <img src="https://www.town.com/images/brand/home/townies/bud.webp" alt="" class="townie-img" />
+      <span class="townie-name">Bud</span>
+      <i class="hgi-stroke hgi-loading-03 townie-spin"></i>
     </div>
-    <nav class="nav">
-      <a class="nav-item"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Home</a>
-      <a class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>Threads</a>
-      <a class="nav-item"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z M9 9h6 M9 13h6 M9 17h4"/></svg>Wiki</a>
-      <a class="nav-item"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0 1 14-5.3L20 9 M20 4v5h-5 M20 12a8 8 0 0 1-14 5.3L4 15 M4 20v-5h5"/></svg>Routines</a>
-      <a class="nav-item"><svg viewBox="0 0 24 24"><path d="M9 3v6 M15 3v6 M6 9h12v3a6 6 0 0 1-12 0z M12 18v3"/></svg>Integrations</a>
-      <div class="nav-label">Concept</div>
-      <a class="nav-item active"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z M8.5 12l2.5 2.5 4.5-5"/></svg>Context provenance</a>
-    </nav>
-    <div class="side-foot">
-      <div class="conn-title">Connected sources</div>
-      <div id="conn"></div>
+    <div class="list-actions">
+      <button class="btn-new"><i class="hgi-stroke hgi-plus-sign"></i>New<i class="hgi-stroke hgi-arrow-down-01 caret"></i></button>
+      <button class="btn-talk"><i class="hgi-stroke hgi-voice"></i>Talk</button>
+      <div class="la-icons"><i class="hgi-stroke hgi-sorting-05"></i><i class="hgi-stroke hgi-search-01"></i><i class="hgi-stroke hgi-notification-02"></i></div>
     </div>
+    <div class="sec-label">Pinned</div>
+    <div class="pin-empty">Pin threads to keep them close at hand.</div>
+    <div class="sec-label">Recents</div>
+    <div id="threadList" class="thread-list"></div>
+    <div class="list-foot">Unofficial concept demo by Mohith Gajjela. Not affiliated with Town. Synthetic data. <a href="https://github.com/Mohith26/town-context-provenance">Source</a></div>
   </aside>
 
   <main class="main">
-    <header class="top">
-      <div class="crumb">Assistant <span>/</span> Context provenance</div>
-      <h1>Every claim, traced to its source and checked for freshness</h1>
-      <p class="lede">Before an answer goes out, it is split into atomic claims. Each claim is checked against every source that mentions it across Slack, Linear, Notion and GitHub, so a newer Linear status beats an old Slack message, a merged PR beats an issue nobody updated, and two docs that disagree get flagged instead of picked from at random.</p>
-      <div class="stats" id="stats"></div>
-    </header>
-
-    <div class="grid">
-      <section class="col">
-        <div class="card">
-          <div class="card-head">
-            <div>
-              <div class="card-title">Ask the team assistant</div>
-              <div class="card-sub">Five questions where freshness-blind retrieval goes wrong in different ways</div>
+    <div class="left">
+      <header class="thread-head">
+        <div class="th-title" id="thTitle"></div>
+        <div class="th-right">
+          <div class="th-avatars" id="thAvatars"></div>
+          <button class="icon-btn" title="Add people"><i class="hgi-stroke hgi-plus-sign"></i></button>
+          <button class="icon-btn" title="Search thread"><i class="hgi-stroke hgi-message-search-01"></i></button>
+          <button class="icon-btn" title="Details" id="detailToggle"><i class="hgi-stroke hgi-information-circle"></i></button>
+        </div>
+      </header>
+      <section class="convo">
+        <div class="scroll" id="scroll"><div class="messages" id="messages"></div></div>
+        <div class="composer-wrap">
+          <div class="composer">
+            <div class="suggest" id="suggest"></div>
+            <div class="ph" id="composerPh">Message Bud</div>
+            <div class="comp-row">
+              <div class="comp-left"><i class="hgi-stroke hgi-at"></i><i class="hgi-stroke hgi-attachment-01"></i><i class="hgi-stroke hgi-shield-01"></i></div>
+              <div class="comp-right"><i class="hgi-stroke hgi-mic-01"></i><span class="send"><i class="hgi-stroke hgi-voice"></i></span></div>
             </div>
           </div>
-          <div class="qtabs" id="qtabs"></div>
-          <div class="thread" id="thread"></div>
         </div>
-
-        <div class="card">
-          <div class="card-head">
-            <div>
-              <div class="card-title">Context budget</div>
-              <div class="card-sub">Pick the smallest, freshest set of sources that still decides every claim. Budgeted submodular coverage, lazy greedy with a certified bound.</div>
-            </div>
-            <div class="budget-ctl">
-              <label for="budget">Token budget</label>
-              <input type="range" id="budget" min="100" max="1500" step="50" value="500" />
-              <output id="budgetOut">500</output>
-            </div>
+      </section>
+    </div>
+    <aside class="panel" id="panel">
+      <div class="panel-head">
+        <div class="panel-title"><span>Context check</span><button class="x" id="panelClose" title="Close"><i class="hgi-stroke hgi-cancel-01"></i></button></div>
+        <div class="tabs" id="tabs">
+          <button data-tab="sources" class="on">Sources</button>
+          <button data-tab="budget">Context budget</button>
+          <button data-tab="accuracy">Accuracy</button>
+        </div>
+      </div>
+      <div class="panel-body">
+        <div id="tab-sources" class="tab"></div>
+        <div id="tab-budget" class="tab" hidden>
+          <p class="p-intro">Bud picks the smallest, freshest set of sources that still decides every claim, instead of the top results by relevance. Budgeted submodular coverage, lazy greedy, with a certified bound on how close it is to the best possible set.</p>
+          <div class="slider-row">
+            <label for="budget">Token budget</label>
+            <input type="range" id="budget" min="100" max="1500" step="50" value="500" />
+            <output id="budgetOut">500</output>
           </div>
           <div class="kpis" id="kpis"></div>
-          <div class="two">
-            <div><div class="list-title">Selected by optimizer</div><div id="selGreedy" class="srclist"></div></div>
-            <div><div class="list-title">Top results by relevance (same budget)</div><div id="selNaive" class="srclist"></div></div>
-          </div>
-          <div class="chart-wrap"><div class="chart-title">Evidence coverage vs. token budget for this question</div><div class="cbox" style="height:230px"><canvas id="budgetChart"></canvas></div></div>
+          <div class="sub-h">Selected by Bud</div>
+          <div class="tbl" id="selGreedy"></div>
+          <div class="sub-h">Top results by relevance, same budget</div>
+          <div class="tbl" id="selNaive"></div>
+          <div class="sub-h">Evidence coverage vs. token budget</div>
+          <div class="cbox" style="height:220px"><canvas id="budgetChart"></canvas></div>
         </div>
-
-        <div class="card">
-          <div class="card-head">
-            <div>
-              <div class="card-title">Does the confidence mean anything?</div>
-              <div class="card-sub" id="evalSub"></div>
-            </div>
-          </div>
+        <div id="tab-accuracy" class="tab" hidden>
+          <div class="sub-h first">This workspace</div>
+          <div class="kpis" id="stats"></div>
+          <div class="sub-h">Does the confidence mean anything?</div>
+          <p class="p-intro" id="evalSub"></p>
           <div class="kpis" id="evalKpis"></div>
-          <div class="two">
-            <div class="chart-wrap"><div class="chart-title">Accuracy when answering only the most-trusted cases</div><div class="cbox" style="height:250px"><canvas id="selChart"></canvas></div></div>
-            <div class="chart-wrap"><div class="chart-title">Calibration: stated confidence vs. how often it was right</div><div class="cbox" style="height:250px"><canvas id="calChart"></canvas></div></div>
-          </div>
-          <p class="note" id="evalNote"></p>
+          <div class="sub-h">Accuracy when answering only the most-trusted cases</div>
+          <div class="cbox" style="height:210px"><canvas id="selChart"></canvas></div>
+          <div class="sub-h">Stated confidence vs. how often it was right</div>
+          <div class="cbox" style="height:210px"><canvas id="calChart"></canvas></div>
+          <p class="p-note" id="evalNote"></p>
         </div>
-
-        <footer class="foot">Unofficial concept demo by Mohith Gajjela. Not affiliated with Town. Synthetic data. <a href="https://github.com/Mohith26/town-context-provenance">Source and tests</a></footer>
-      </section>
-
-      <aside class="detail" id="detail"></aside>
-    </div>
+      </div>
+      <div class="panel-foot" id="panelFoot"></div>
+    </aside>
   </main>
 </div>
 <script type="module" src="app.js"></script>

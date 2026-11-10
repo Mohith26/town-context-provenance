@@ -33,6 +33,10 @@ All logic is in [`src/core.js`](src/core.js) (no dependencies; runs in the brows
 
 **Baseline.** BM25 over title + text, top 6; each claim comes from the highest-ranked source that says anything about it.
 
+## UI
+
+The page is laid out as a screen inside Town's web app, matched against public in-app footage from Town's own changelog videos: icon rail, Townie card and thread list, thread view with Townie messages, a composer with suggestion chips, and the floating Details-style panel on the right, which here holds the context check (Sources, Context budget, Accuracy). Icons are Hugeicons stroke-rounded (the set Town's site uses), loaded from the Hugeicons CDN. Town's typefaces (ABC Diatype, ABC Stefan Simple), the Bud Townie illustration and the integration icons are referenced from town.com, where they are publicly served; nothing of theirs is copied into this repo, and Inter is the fallback font. Remove those references before showing this anywhere other than to Town.
+
 ## Run it
 
 ```bash
